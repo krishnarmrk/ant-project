@@ -1,0 +1,125 @@
+<project name="sonar-h2" basedir="." default="all" xmlns:sonar="antlib:org.sonar.ant">
+
+
+		<!-- project-specific variables 
+	
+	
+	<tyedef name="runclock" classname="com.acme.ant.RunClock"adapter="org.acme.ant.RunnableAdapter">
+		
+	</tyedef>
+		-->
+
+		<!--
+		<property name="lib_dir" value="C:/Program Files/ant/lib"/>
+	<typedef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="${lib_dir}/ant-contrib-0.3.jar"/>
+		</classpath>
+	</typedef>
+		-->
+
+	<property name="src_dir" value="D:/ant-practice/sonar/sonar-h2/src/main"/>
+	<property name="sr_java_dir" value="${src_dir}/java"/>
+	<property name="src_classes" value="${src_dir}/classes"/>
+	<property name="dest_dir" value="D:/ant-practice/sonar/sonar-h2/dest"/>
+	<property name="war_pac" value="D:/ant-practice/sonar/sonar-h2/WebContent/WEB-INF"/>
+
+
+<!-- Define the SonarQube global properties (the most usual way is to pass these properties via the command line) -->
+	<property name="sonar.host.url" value="http://localhost:9000/sonar/projects" />
+	
+	<!-- Define the Sonar properties -->
+	<property name="sonar.projectKey" value="org.sonarqube:sonarqube-scanner-ant" />
+	<property name="sonar.projectName" value="sonar-h2" />
+	<property name="sonar.projectVersion" value="1.0" />
+	<property name="sonar.language" value="java" />
+	<property name="sonar.sources" value="D:/ant-practice/sonar/sonar-h2/src/main/classes" />
+	<property name="sonar.binaries" value="D:/ant-practice/sonar/sonar-h2/dest" />
+	<property name="sonar.sourceEncoding" value="C:/Program Files/ant/lib/*.jar" />
+	
+	
+	<patternset id="javafiles">
+		<include name="**/*.java"/>
+		<include name="**/*.sh"/>
+		<include name="**/*.properties"/>
+		<include name="**/*.bat"/>
+		<exclude name="**/*.doc"/>
+		<exclude name="**/*test*.java"/>
+	</patternset>
+
+	<filelist id="txtfiles" dir="${src_dir}">
+		<file name="one.txt"/>
+		<file name="two.txt"/>
+		<file name="three.txt"/>
+	</filelist>
+
+		<!-- project-Script starts from here -->
+
+	<target name="clean">
+		<echo message="cleaning working copy"/>
+		<delete dir="${sr_java_dir}"/>
+		<delete dir="${src_classes}"/>
+		<delete dir="${dest_dir}"/>
+	</target>
+
+	<target name="create">
+		<echo message="Creating new working copy"/>
+		<mkdir dir="${dest_dir}"/>
+		<mkdir dir="${sr_java_dir}"/>
+		<mkdir dir="${src_classes}"/>
+	</target>
+
+	<target name="move">
+		<echo message="moving files"/>
+		<move file="D:/ant-practice/final/src/main/dontuch.doc" todir="D:/ant-practice/final/src"/>
+	</target>
+	
+	<target name="copy">
+		<echo message="Coping files"/>
+		<copy todir="${sr_java_dir}">
+			<fileset dir="${src_dir}" casesensitive="no">
+				<patternset refid="javafiles"/>
+			</fileset>
+		</copy>
+		
+		<copy todir="${dest_dir}">
+			<filelist refid="txtfiles"/>
+		</copy>
+				
+	</target>
+
+	<target name="compile">
+		<echo message="Compiling code"/>
+		<javac srcdir="${sr_java_dir}" destdir="${src_classes}" includeantruntime="false"/>
+	</target>
+	
+		
+		
+	<target name="cratingwar">
+		<echo message="creating war package"/>
+		<war destfile="${dest_dir}/AntExample.war" webxml="${war_pac}/web.xml"/>
+	</target>
+	
+
+	<target name="package">
+		<echo message="packaging code"/>
+		<jar destfile="${dest_dir}/buildoutput.jar" basedir="${src_classes}"/>
+	</target>
+
+	<target name="sonar" depends="compile">
+		<taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+			<!-- Update the following line, or put the "sonar-ant-task-*.jar" file in your "$HOME/.ant/lib" folder -->
+			<classpath path="C:/Program Files/ant/lib/sonarqube-ant-task.jar" />
+		</taskdef>
+		
+		<!-- Execute SonarQube Scanner for Ant Analysis -->
+		 <sonar:sonar /> 
+	</target>
+		<!-- project-specific dependencies -->
+		
+	<target name="all" depends="clean, create, copy, cratingwar, package, sonar">
+		<echo message="Calling all dependencies"/>
+	</target>
+
+
+</project>
