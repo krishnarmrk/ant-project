@@ -1,24 +1,6 @@
 <project name="sonar-h2" basedir="." default="all" xmlns:sonar="antlib:org.sonar.ant">
 
-
-		<!-- project-specific variables 
-	
-	
-	<tyedef name="runclock" classname="com.acme.ant.RunClock"adapter="org.acme.ant.RunnableAdapter">
-		
-	</tyedef>
-		-->
-
-		<!--
-		<property name="lib_dir" value="C:/Program Files/ant/lib"/>
-	<typedef resource="net/sf/antcontrib/antcontrib.properties">
-		<classpath>
-			<pathelement location="${lib_dir}/ant-contrib-0.3.jar"/>
-		</classpath>
-	</typedef>
-		-->
-
-	<property name="src_dir" value="D:/ant-practice/sonar/sonar-h2/src/main"/>
+	<property name="src_dir" value="${workspace}/src/main"/>
 	<property name="sr_java_dir" value="${src_dir}/java"/>
 	<property name="src_classes" value="${src_dir}/classes"/>
 	<property name="dest_dir" value="D:/ant-practice/sonar/sonar-h2/dest"/>
